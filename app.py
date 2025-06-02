@@ -59,14 +59,13 @@ def lambda_handler(event, context=None):
     for record in event["Records"]:
         source_bucket = record["s3"]["bucket"]["name"]
         source_object_key = record["s3"]["object"]["key"]
-
+        category = get_category(source_bucket, source_object_key)
+        dest_bucket = CATEGORY_BUCKETS[category]
+        
         if not OTHER_BUCKET:
             raise ValueError("Expects 'Other' bucket to be available")
         elif source_bucket == dest_bucket:
             raise ValueError("Can't reuse source bucket as a destination")
-
-        category = get_category(source_bucket, source_object_key)
-        dest_bucket = CATEGORY_BUCKETS[category]
 
         if not dest_bucket:
             dest_bucket = OTHER_BUCKET
