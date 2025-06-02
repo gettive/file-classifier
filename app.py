@@ -72,13 +72,23 @@ def lambda_handler(event, context=None):
 
         print(f"Copying '{source_object_key}' to '{dest_bucket}' under category '{category}'")
 
-        s3.copy_object(
-            Bucket=dest_bucket,
-            CopySource={'Bucket': source_bucket, 'Key': source_object_key},
-            Key=source_object_key
-        )
+        try:
+            response = s3.copy_object(
+                Bucket=dest_bucket,
+                CopySource={'Bucket': source_bucket, 'Key': source_object_key},
+                Key=source_object_key
+            )
 
-    return {"statusCode": 200, "body": "Files copied successfully"}
+            if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                response = s3.delete_object(Bucket=source_bucket, Key=source_object_key)
+                print("Copy succeeded")
+            else:
+                print("Copy may have failed, status code:", response['ResponseMetadata']['HTTPStatusCode'])
+
+        except ClientError as e:
+            print("Copy failed:", e)
+
+    return {"statusCode": 200, "body": "Files moved successfully"}
 
 
 if __name__ == "__main__":
