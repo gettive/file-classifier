@@ -1,6 +1,7 @@
 FROM amazonlinux:2
 
-RUN yum install -y python3 python3-pip boto3
+RUN yum install -y python3 python3-pip \
+    && pip3 install boto3
 
 COPY app.py /var/task/app.py
 COPY bootstrap /var/task/bootstrap
