@@ -6,7 +6,4 @@ if [ -z "${AWS_LAMBDA_RUNTIME_API:-}" ]; then
   exit 0
 fi
 
-# Update our virus definitions
-./usr/bin/freshclam
-
 exec python3 /var/task/app.py
