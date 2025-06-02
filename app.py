@@ -69,7 +69,7 @@ def lambda_handler(event, context=None):
         dest_bucket = CATEGORY_BUCKETS[category]
 
         if not dest_bucket:
-
+            dest_bucket = OTHER_BUCKET
 
         print(f"Copying '{src_key}' to '{dest_bucket}' under category '{category}'")
 
