@@ -62,7 +62,7 @@ def lambda_handler(event, context=None):
 
         if not OTHER_BUCKET:
             raise ValueError("Expects 'Other' bucket to be available")
-        elif source_bucket == dest_bucket or :
+        elif source_bucket == dest_bucket:
             raise ValueError("Can't reuse source bucket as a destination")
 
         category = get_category(source_bucket, source_object_key)
