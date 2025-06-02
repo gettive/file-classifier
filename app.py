@@ -61,7 +61,7 @@ def lambda_handler(event, context=None):
         source_object_key = record["s3"]["object"]["key"]
         category = get_category(source_bucket, source_object_key)
         dest_bucket = CATEGORY_BUCKETS[category]
-        
+
         if not OTHER_BUCKET:
             raise ValueError("Expects 'Other' bucket to be available")
         elif source_bucket == dest_bucket:
@@ -70,12 +70,12 @@ def lambda_handler(event, context=None):
         if not dest_bucket:
             dest_bucket = OTHER_BUCKET
 
-        print(f"Copying '{src_key}' to '{dest_bucket}' under category '{category}'")
+        print(f"Copying '{source_object_key}' to '{dest_bucket}' under category '{category}'")
 
         s3.copy_object(
             Bucket=dest_bucket,
             CopySource={'Bucket': source_bucket, 'Key': source_object_key},
-            Key=src_key
+            Key=source_object_key
         )
 
     return {"statusCode": 200, "body": "Files copied successfully"}
